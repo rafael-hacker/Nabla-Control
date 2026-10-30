@@ -9,13 +9,7 @@
 #include <cctype>
 #include <fstream>
 #include <iostream>
-
-typedef struct {
-    pid_t pid;
-    std::string name;
-}ProcessInfo;
-
-const std::string pid_path = "/proc";
+#include "../include/ProcessCollector.hpp"
 
 std::vector<ProcessInfo> ReadProcess(){    
     
