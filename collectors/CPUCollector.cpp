@@ -39,6 +39,7 @@ std::vector <CpuTimes> CpuRead(){
         ss>>cpu_t.names>>cpu_t.user>>cpu_t.nice>>cpu_t.system>>cpu_t.idle>>cpu_t.iowait>>cpu_t.irq>>cpu_t.softirq>>cpu_t.steal>>cpu_t.guest>>cpu_t.guest_nice;
         cpus.push_back(cpu_t);       
     }
+    cpu_path.close();
     return cpus;
 }
 
