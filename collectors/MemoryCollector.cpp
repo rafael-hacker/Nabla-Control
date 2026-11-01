@@ -43,6 +43,3 @@ Memory GetMemory(){
     return mem;
 }
 
-int main(){
-    GetMemory();
-}
