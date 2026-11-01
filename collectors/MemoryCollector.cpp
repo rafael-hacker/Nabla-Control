@@ -18,22 +18,23 @@ Memory GetMemory(){
     unsigned long long mem_total;
 
     while (std::getline(file, line)){
-        if (line.start_with("MemTotal:")){
+        if (line.starts_with("MemTotal:")){
             std::istringstream iss(line);
             std::string key;
             iss >> key >> mem_total;
         }
-        if (line.start_with("MemFree:")){
+        if (line.starts_with("MemFree:")){
             std::istringstream iss(line);
             std::string key;
             iss >> key >> mem_free;
         }
-        if (line.start_with("MemAvaliable:")){
+        if (line.starts_with("MemAvaliable:")){
             std::istringstream iss(line);
             std::string key;
             iss >> key >> mem_avaliable;
         }
     } 
+    file.close();
     mem.memory_AvaliableGB = mem_avaliable / GB;
     mem.memory_freeGB = mem_free / GB;
     mem.memory_totalGB = mem_total / GB;
@@ -41,4 +42,3 @@ Memory GetMemory(){
     mem.usage_percent = (mem.memory_totalGB - mem.memory_AvaliableGB / mem.memory_totalGB) * 100;
     return mem;
 }
-
