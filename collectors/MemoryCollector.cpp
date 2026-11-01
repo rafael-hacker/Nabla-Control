@@ -28,7 +28,7 @@ Memory GetMemory(){
             std::string key;
             iss >> key >> mem_free;
         }
-        if (line.starts_with("MemAvaliable:")){
+        if (line.starts_with("MemAvailable:")){
             std::istringstream iss(line);
             std::string key;
             iss >> key >> mem_avaliable;
@@ -41,4 +41,8 @@ Memory GetMemory(){
 
     mem.usage_percent = (mem.memory_totalGB - mem.memory_AvaliableGB / mem.memory_totalGB) * 100;
     return mem;
+}
+
+int main(){
+    GetMemory();
 }

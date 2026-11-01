@@ -6,6 +6,6 @@ struct Memory{
     double usage_percent;
 };
 
-constexpr double GB = 1024.0 * 1024.0 * 1024.0;
+constexpr double GB = 1024 * 1024;
 
 Memory GetMemory();
