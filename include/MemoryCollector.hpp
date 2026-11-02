@@ -1,3 +1,4 @@
+#pragma once
 struct Memory{
     double memory_freeGB;
     double memory_AvaliableGB;

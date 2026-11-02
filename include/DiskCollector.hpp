@@ -1,3 +1,4 @@
+#pragma once
 struct DiskSpace{
     double avaliable;
     double total;
