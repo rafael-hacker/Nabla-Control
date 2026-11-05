@@ -10,8 +10,8 @@ NetCounter GetNetworkCounter(){
     NetCounter total{};
 
     std::string network_file = "/proc/net/dev";
-    NetworkStats net;
     std::ifstream file(network_file);
+
     if (!file.is_open()){
         std::cerr << "[ERROR] failed to open " <<  network_file << '\n';
         exit(1); 
@@ -21,26 +21,29 @@ NetCounter GetNetworkCounter(){
     std::getline(file, line);
     std::getline(file, line);
 
-    unsigned long long rx_b;
-    unsigned long long tx_b;    
 
     while (std::getline(file, line)){
+        unsigned long long rx_b{};
+        unsigned long long tx_b{};   
+
         std::istringstream iss(line);
-        std::string name;
-        
-        if (name == "lo"){continue;}
-        
+        std::string name;     
+    
         iss >> std::ws;
         std::getline(iss, name, ':');
-        
+
+        if (name == "lo"){continue;}  
+
         unsigned long long skip;
         
         iss >> rx_b;
         for (size_t i=0; i < 7; i++){ iss >> skip;}
         iss >> tx_b;
+        
+        total.rx += rx_b;
+        total.tx += tx_b;
     }
-    net.rx_mbps = rx_b;
-    net.tx_mbps = tx_b; 
+    
     return total;
  
 }
