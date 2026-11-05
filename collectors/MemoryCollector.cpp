@@ -5,7 +5,7 @@
 #include "../include/MemoryCollector.hpp"
 
 Memory GetMemory(){
-    Memory mem;
+    Memory mem{};
     std::ifstream file("/proc/meminfo");
     if (!file.is_open()){
         std::cerr << "[ERROR] Failed to open /proc/meminfo";
