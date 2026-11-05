@@ -39,7 +39,7 @@ Memory GetMemory(){
     mem.memory_freeGB = mem_free / GB;
     mem.memory_totalGB = mem_total / GB;
 
-    mem.usage_percent = (mem.memory_totalGB - mem.memory_AvaliableGB / mem.memory_totalGB) * 100;
+    mem.usage_percent = (mem.memory_totalGB - mem.memory_AvaliableGB / mem.memory_totalGB) / mem.memory_totalGB * 100;
     return mem;
 }
 
