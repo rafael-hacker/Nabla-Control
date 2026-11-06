@@ -23,7 +23,9 @@ int main(){
         ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus;
         
         ImGui::Begin("nabla-control", nullptr, flags);
-        ImGui::Text("%.2f GB", mem.memory_totalGB);        
+        ImGui::Text(" memory total: %.2f GB", mem.memory_totalGB);    
+        ImGui::Text(" memory_Avaliable: %.2f GB", mem.memory_AvaliableGB);
+        ImGui::Text(" Memory Free: %.2f GB", mem.memory_freeGB);
         ImGui::End();
 
         rlImGuiEnd();
