@@ -3,6 +3,7 @@ project(nabla-control VERSION 0.0.9 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(FetchContent)
 
@@ -48,13 +49,13 @@ target_link_libraries(rlimgui PUBLIC imgui raylib)
 target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR})
 
 set (SOURCES
-    ../../collectors/DiskCollector.cpp
-    ../../collectors/CPUCollector.cpp
-    ../../collectors/ProcessCollector.cpp
-    ../../collectors/NetworkCollector.cpp
-    ../../collectors/TemperatureCollector.cpp
-    ../../collectors/MemoryCollector.cpp
-    ../../src/main.cpp
+    collectors/DiskCollector.cpp
+    collectors/CPUCollector.cpp
+    collectors/ProcessCollector.cpp
+    collectors/NetworkCollector.cpp
+    collectors/TemperatureCollector.cpp
+    collectors/MemoryCollector.cpp
+    src/main.cpp
 )
 
 add_executable(nabla-control ${SOURCES})
