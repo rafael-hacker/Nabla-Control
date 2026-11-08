@@ -54,7 +54,7 @@ CpuUsage CpuUsageCalculate(){
         return cpus;
     }
     
-    cpus.cpu = calc_percent(after[0], before[0]);    
+    cpus.cpu = calc_percent(before[0], after[0]);    
 
     for(size_t i=1; i < before.size(); i++){
        cpus.cpus.push_back(calc_percent(after[i], before[i])); 

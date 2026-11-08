@@ -1,20 +1,23 @@
 #include "raylib.h"
 #include "imgui.h"
 #include "rlImGui.h"
-#include "core/SystemSnapshot.hpp"
+#include "../include/CPUCollector.hpp"
 #include "../include/MemoryCollector.hpp"
 
 
 int main(){
-    Systemsnapshot sys;
     InitWindow(800, 650, "Nabla Control");
     SetTargetFPS(60);
     rlImGuiSetup(true);
     auto& style = ImGui::GetStyle();
     style.FrameRounding = 19.0f;
+    CpuUsage cpu = CpuUsageCalculate();
+    double lastcpu = 0.0;
 
     while (!WindowShouldClose()){
         Memory mem = GetMemory();
+    
+        
         BeginDrawing();
         ClearBackground(WHITE);
         rlImGuiBegin();
@@ -26,6 +29,8 @@ int main(){
         ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus;
         
         ImGui::Begin("nabla-control", nullptr, flags);
+
+        if (ImGui::GetTime() - lastcpu >= 1){lastcpu = ImGui::GetTime(); cpu = CpuUsageCalculate();}
         if (ImGui::CollapsingHeader("Memory", ImGuiTreeNodeFlags_DefaultOpen)){
             ImGui::Indent();
             ImGui::SeparatorText(" Memory used ");
@@ -35,11 +40,20 @@ int main(){
             ImGui::SeparatorText(" Memory Available "); 
             ImGui::ProgressBar(mem.memory_AvaliableGB / mem.memory_totalGB);
             ImGui::Separator();
-            ImGui::TextColored({1.0, 2.0, 0, 1.9}, "Memory Available: %.2fGB", mem.memory_AvaliableGB);
+            ImGui::TextColored({1.0, 1.0, 0, 1}, "Memory Available: %.2fGB", mem.memory_AvaliableGB);
+            ImGui::Unindent();
+        } 
+        if (ImGui::CollapsingHeader("CPU", ImGuiTreeNodeFlags_DefaultOpen)){
+            ImGui::Indent();
+            ImGui::SeparatorText("cpu");
+            ImGui::ProgressBar(cpu.cpu / 100.0f);
             ImGui::Unindent();
         }
+        
         ImGui::End();
-
+        
+        
+        
         rlImGuiEnd();
         EndDrawing();
     }
