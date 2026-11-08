@@ -39,7 +39,7 @@ int main(){
             ImGui::ProgressBar(usedGB / mem.memory_totalGB);
             ImGui::PopStyleColor();
             ImGui::Separator();
-            ImGui::TextColored({1, 1, 0, 1}, "Memory Used: %.2fGb", usedGB);
+            ImGui::TextColored({1, 1, 0, 1}, "Memory Used: %.2fGB", usedGB);
             ImGui::SeparatorText(" Memory Available "); 
             ImGui::ProgressBar(mem.memory_AvaliableGB / mem.memory_totalGB);
             ImGui::Separator();
@@ -50,10 +50,15 @@ int main(){
             ImGui::Indent();
             ImGui::SeparatorText("Cpu");
             ImGui::ProgressBar(cpu.cpu / 100.0f);
-            for (std::size_t i=0; i < cpu.cpus.size(); i++){
-                ImGui::Text("Cpu %zu", i);
-                ImGui::SameLine();
-                ImGui::ProgressBar(cpu.cpus[i] / 100.0f); 
+            ImGui::SeparatorText("Cpus core");
+            if (ImGui::CollapsingHeader("Cpus")){
+                for (std::size_t i=0; i < cpu.cpus.size(); i++){
+                    ImGui::Indent();
+                    ImGui::Text("Cpu %zu", i);
+                    ImGui::SameLine();
+                    ImGui::ProgressBar(cpu.cpus[i] / 100.0f); 
+                    ImGui::Unindent();
+                }
             }
             ImGui::Unindent();
         }
