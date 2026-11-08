@@ -3,6 +3,7 @@
 #include "rlImGui.h"
 #include "../include/CPUCollector.hpp"
 #include "../include/MemoryCollector.hpp"
+#include <cstddef>
 
 
 int main(){
@@ -37,6 +38,8 @@ int main(){
             ImGui::PushStyleColor(ImGuiCol_PlotHistogram, {1, 0,0,1});
             ImGui::ProgressBar(usedGB / mem.memory_totalGB);
             ImGui::PopStyleColor();
+            ImGui::Separator();
+            ImGui::TextColored({1, 1, 0, 1}, "Memory Used: %.2fGb", usedGB);
             ImGui::SeparatorText(" Memory Available "); 
             ImGui::ProgressBar(mem.memory_AvaliableGB / mem.memory_totalGB);
             ImGui::Separator();
@@ -45,10 +48,16 @@ int main(){
         } 
         if (ImGui::CollapsingHeader("CPU", ImGuiTreeNodeFlags_DefaultOpen)){
             ImGui::Indent();
-            ImGui::SeparatorText("cpu");
+            ImGui::SeparatorText("Cpu");
             ImGui::ProgressBar(cpu.cpu / 100.0f);
+            for (std::size_t i=0; i < cpu.cpus.size(); i++){
+                ImGui::Text("Cpu %zu", i);
+                ImGui::SameLine();
+                ImGui::ProgressBar(cpu.cpus[i] / 100.0f); 
+            }
             ImGui::Unindent();
         }
+    
         
         ImGui::End();
         
