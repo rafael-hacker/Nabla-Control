@@ -29,7 +29,9 @@ int main(){
         if (ImGui::CollapsingHeader("Memory", ImGuiTreeNodeFlags_DefaultOpen)){
             ImGui::Indent();
             ImGui::SeparatorText(" Memory used ");
+            ImGui::PushStyleColor(ImGuiCol_PlotHistogram, {1, 0,0,1});
             ImGui::ProgressBar(usedGB / mem.memory_totalGB);
+            ImGui::PopStyleColor();
             ImGui::SeparatorText(" Memory Available "); 
             ImGui::ProgressBar(mem.memory_AvaliableGB / mem.memory_totalGB);
             ImGui::Separator();
