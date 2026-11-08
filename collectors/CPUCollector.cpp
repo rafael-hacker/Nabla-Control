@@ -16,6 +16,7 @@ double calc_percent(CpuTimes a, CpuTimes b){
     double idle_b = b.idle + b.iowait;
 
     double total = total_b - total_a;
+    if (total <= 0){return 0.0;}
     double idle = idle_b - idle_a;
     double usage;
     return usage = 100 * (total - idle) / total;
@@ -45,16 +46,20 @@ std::vector <CpuTimes> CpuRead(){
 
 CpuUsage CpuUsageCalculate(){
     CpuUsage cpus;
-    std::vector <CpuTimes> after = CpuRead();
-    std::this_thread::sleep_for(std::chrono::seconds(1));
-    std::vector<CpuTimes> before = CpuRead();
-    if(after.empty() && after.size() != before.size()){
-        return cpus;    
+    static std::vector<CpuTimes> before = CpuRead();
+    std::vector<CpuTimes> after = CpuRead();
+
+    if (after.empty() || after.size() != before.size()){
+        before = after;
+        return cpus;
     }
-    cpus.cpu = calc_percent(after[0], before[0]);
+    
+    cpus.cpu = calc_percent(after[0], before[0]);    
+
     for(size_t i=1; i < before.size(); i++){
        cpus.cpus.push_back(calc_percent(after[i], before[i])); 
     }
-    after = before;
+    
+    before = after;
     return cpus;
 }
