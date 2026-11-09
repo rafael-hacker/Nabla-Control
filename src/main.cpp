@@ -3,6 +3,7 @@
 #include "rlImGui.h"
 #include "../include/CPUCollector.hpp"
 #include "../include/MemoryCollector.hpp"
+#include "../include/DiskCollector.hpp"
 #include <cstddef>
 
 
@@ -60,6 +61,12 @@ int main(){
                     ImGui::Unindent();
                 }
             }
+            ImGui::Unindent();
+        }
+        
+        if (ImGui::CollapsingHeader("Disk", ImGuiTreeNodeFlags_DefaultOpen)){
+            ImGui::Indent();
+            // content 
             ImGui::Unindent();
         }
     
