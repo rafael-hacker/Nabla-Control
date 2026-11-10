@@ -1,10 +1,12 @@
 #include "raylib.h"
 #include "imgui.h"
 #include "rlImGui.h"
+#include <vector>
 #include "../include/CPUCollector.hpp"
 #include "../include/MemoryCollector.hpp"
 #include "../include/DiskCollector.hpp"
 #include "../include/Temperature.hpp"
+#include "../include/ProcessCollector.hpp"
 #include <cstddef>
 
 
@@ -32,7 +34,8 @@ int main(){
     while (!WindowShouldClose()){
         Memory mem = GetMemory();
         DiskSpace disk = GetDiskSpace();
-        Temperature temperature = GetTemp();    
+        Temperature temperature = GetTemp();  
+        std::vector<ProcessInfo> processes = ReadProcess();
 
         BeginDrawing();
         ClearBackground(Color({15,17,21,255}));
@@ -112,7 +115,30 @@ int main(){
             ImGui::TextColored({1, 0, 0, 1}, "%.2f°C", temperature.temperature_celsius);
             ImGui::Unindent();
         }
-        
+
+        if (ImGui::CollapsingHeader("Process")){
+            ImGui::Indent();
+            if (ImGui::BeginTable("process table", 2, ImGuiTableFlags_Borders | ImGuiTableFlags_RowBg)){
+                ImGui::TableSetupColumn("PID");
+                ImGui::TableSetupColumn("Name");
+                ImGui::TableHeadersRow();
+
+                ImGui::TableNextRow();
+                ImGui::TableSetColumnIndex(0);
+                for (std::size_t i=0; i < processes.size(); i++){
+                    ImGui::TextColored({0.95f, 0.45f, 0.45f, 1.0f} ,"%d", processes[i].pid);
+                }
+
+                ImGui::TableSetColumnIndex(1);
+                
+                for (std::size_t i=0; i < processes.size(); i++){
+                    ImGui::TextColored({0.45f, 0.85f, 0.55f, 1.0f}, "%s", processes[i].name.c_str());
+                }
+                
+                ImGui::EndTable();              
+            }
+            ImGui::Unindent();
+        }
 
         ImGui::End();
         
