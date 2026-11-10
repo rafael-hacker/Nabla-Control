@@ -55,6 +55,7 @@ set (SOURCES
     collectors/NetworkCollector.cpp
     collectors/TemperatureCollector.cpp
     collectors/MemoryCollector.cpp
+    src/core/KillProcess.cpp
     src/main.cpp
 )
 

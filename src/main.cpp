@@ -1,12 +1,14 @@
 #include "raylib.h"
 #include "imgui.h"
 #include "rlImGui.h"
+#include <string>
 #include <vector>
 #include "../include/CPUCollector.hpp"
 #include "../include/MemoryCollector.hpp"
 #include "../include/DiskCollector.hpp"
 #include "../include/Temperature.hpp"
 #include "../include/ProcessCollector.hpp"
+#include "../include/KillProcess.hpp"
 #include <cstddef>
 
 
@@ -127,6 +129,11 @@ int main(){
                 ImGui::TableSetColumnIndex(0);
                 for (std::size_t i=0; i < processes.size(); i++){
                     ImGui::TextColored({0.95f, 0.45f, 0.45f, 1.0f} ,"%d", processes[i].pid);
+                    ImGui::SameLine();
+                    std::string bnt_button = "Kill##" + std::to_string(processes[i].pid);
+                    if (ImGui::SmallButton(bnt_button.c_str())){
+                        kill_process(processes[i].pid);
+                    }
                 }
 
                 ImGui::TableSetColumnIndex(1);
