@@ -19,8 +19,12 @@ int main(){
     style.ItemSpacing = {12.0f, 10.0f};
     style.Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.07f, 0.09f, 0.95f);
     style.Colors[ImGuiCol_Header] = ImVec4(0, 0, 0, 0);
+    style.Colors[ImGuiCol_HeaderActive] = ImVec4(0,0,0,0);
+    style.Colors[ImGuiCol_HeaderHovered] = ImVec4(0,0,0,0);
     style.Colors[ImGuiCol_Border] = ImVec4(0.3f, 0.8f, 0.9f, 0.5f);
     style.WindowBorderSize = 1.5f;
+    style.Colors[ImGuiCol_TitleBg] = ImVec4(0.10f,0.12f,0.16f,1);
+    
     CpuUsage cpu = CpuUsageCalculate();
     double lastcpu = 0.0;
 
@@ -37,9 +41,12 @@ int main(){
         ImGui::SetNextWindowPos(vp->Pos);
         ImGui::SetNextWindowSize(vp->Size);
 
-        ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse;
+        ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar |ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse;
         
         ImGui::Begin("nabla-control", nullptr, flags);
+        ImGui::TextColored({0.3f, 0.8f, 0.9f, 1}, "∇ Nabla Control ");
+        ImGui::Separator();
+        ImGui::Spacing();
 
         if (ImGui::GetTime() - lastcpu >= 1){lastcpu = ImGui::GetTime(); cpu = CpuUsageCalculate();}
         if (ImGui::CollapsingHeader("Memory", ImGuiTreeNodeFlags_DefaultOpen)){
