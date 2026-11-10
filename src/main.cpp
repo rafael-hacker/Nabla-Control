@@ -18,11 +18,12 @@ int main(){
 
     while (!WindowShouldClose()){
         Memory mem = GetMemory();
-    
+        DiskSpace disk = GetDiskSpace();
         
         BeginDrawing();
         ClearBackground(WHITE);
         rlImGuiBegin();
+        float Used_disk_gb = disk.total - disk.avaliable;
         float usedGB = mem.memory_totalGB - mem.memory_AvaliableGB;
         ImGuiViewport *vp = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(vp->Pos);
@@ -36,15 +37,17 @@ int main(){
         if (ImGui::CollapsingHeader("Memory", ImGuiTreeNodeFlags_DefaultOpen)){
             ImGui::Indent();
             ImGui::SeparatorText(" Memory used ");
-            ImGui::PushStyleColor(ImGuiCol_PlotHistogram, {1, 0,0,1});
+            ImGui::PushStyleColor(ImGuiCol_PlotHistogram, {0.9f, 0.3f, 0.3f, 1.0f});
             ImGui::ProgressBar(usedGB / mem.memory_totalGB);
             ImGui::PopStyleColor();
             ImGui::Separator();
-            ImGui::TextColored({1, 1, 0, 1}, "Memory Used: %.2fGB", usedGB);
+            ImGui::TextColored({0.9f, 0.3f, 0.3f, 1.0f}, "Memory Used: %.2fGB", usedGB);
             ImGui::SeparatorText(" Memory Available "); 
+            ImGui::PushStyleColor(ImGuiCol_PlotHistogram, {1.00f, 1.00f, 0.40f, 1.0f});
             ImGui::ProgressBar(mem.memory_AvaliableGB / mem.memory_totalGB);
+            ImGui::PopStyleColor();
             ImGui::Separator();
-            ImGui::TextColored({1.0, 1.0, 0, 1}, "Memory Available: %.2fGB", mem.memory_AvaliableGB);
+            ImGui::TextColored({0.55f, 0.95f, 0.60f, 1.0f}, "Memory Available: %.2fGB", mem.memory_AvaliableGB);
             ImGui::Unindent();
         } 
         if (ImGui::CollapsingHeader("CPU", ImGuiTreeNodeFlags_DefaultOpen)){
@@ -66,7 +69,21 @@ int main(){
         
         if (ImGui::CollapsingHeader("Disk", ImGuiTreeNodeFlags_DefaultOpen)){
             ImGui::Indent();
-            // content 
+            ImGui::SeparatorText("Disk usage");
+            ImGui::PushStyleColor(ImGuiCol_PlotHistogram, {0.9f, 0.3f, 0.3f, 1.0f});
+            ImGui::ProgressBar(disk.percent_usage / 100.0f);
+            ImGui::PopStyleColor();            
+
+            ImGui::Separator();
+            ImGui::TextColored({1, 0, 0, 1}, "Disk Usage %.2fGB", Used_disk_gb);
+            ImGui::SeparatorText("Disk Available");
+            
+            ImGui::PushStyleColor(ImGuiCol_PlotHistogram, {0.3f, 0.85f, 0.4f, 1.0f});
+            ImGui::ProgressBar(disk.percent_available / 100.0f);
+            ImGui::PopStyleColor()
+;
+            ImGui::Separator();
+            ImGui::TextColored({0, 1, 0, 1}, "Disk Available %.2fGB", disk.avaliable);
             ImGui::Unindent();
         }
     
