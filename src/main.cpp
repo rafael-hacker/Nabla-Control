@@ -13,6 +13,7 @@ int main(){
     rlImGuiSetup(true);
     auto& style = ImGui::GetStyle();
     style.FrameRounding = 19.0f;
+    style.ItemSpacing = {12.0f, 10.0f};
     CpuUsage cpu = CpuUsageCalculate();
     double lastcpu = 0.0;
 
