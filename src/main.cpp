@@ -18,7 +18,7 @@ int main(){
     style.WindowRounding = 12.0f;
     style.ItemSpacing = {12.0f, 10.0f};
     style.Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.07f, 0.09f, 0.95f);
-    style.Colors[ImGuiCol_Header] = ImVec4(0.15f, 0.15f, 0.015f, 0.03f);
+    style.Colors[ImGuiCol_Header] = ImVec4(0, 0, 0, 0);
     style.Colors[ImGuiCol_Border] = ImVec4(0.3f, 0.8f, 0.9f, 0.5f);
     style.WindowBorderSize = 1.5f;
     CpuUsage cpu = CpuUsageCalculate();
