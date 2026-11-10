@@ -11,9 +11,16 @@ int main(){
     InitWindow(800, 650, "Nabla Control");
     SetTargetFPS(60);
     rlImGuiSetup(true);
+    ImGui::StyleColorsDark();
     auto& style = ImGui::GetStyle();
-    style.FrameRounding = 19.0f;
+    
+    style.FrameRounding = 6.0f;
+    style.WindowRounding = 12.0f;
     style.ItemSpacing = {12.0f, 10.0f};
+    style.Colors[ImGuiCol_WindowBg] = ImVec4(0.06f, 0.07f, 0.09f, 0.95f);
+    style.Colors[ImGuiCol_Header] = ImVec4(0.15f, 0.15f, 0.015f, 0.03f);
+    style.Colors[ImGuiCol_Border] = ImVec4(0.3f, 0.8f, 0.9f, 0.5f);
+    style.WindowBorderSize = 1.5f;
     CpuUsage cpu = CpuUsageCalculate();
     double lastcpu = 0.0;
 
@@ -22,7 +29,7 @@ int main(){
         DiskSpace disk = GetDiskSpace();
         
         BeginDrawing();
-        ClearBackground(WHITE);
+        ClearBackground(Color({15,17,21,255}));
         rlImGuiBegin();
         float Used_disk_gb = disk.total - disk.avaliable;
         float usedGB = mem.memory_totalGB - mem.memory_AvaliableGB;
@@ -30,7 +37,7 @@ int main(){
         ImGui::SetNextWindowPos(vp->Pos);
         ImGui::SetNextWindowSize(vp->Size);
 
-        ImGuiWindowFlags flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus;
+        ImGuiWindowFlags flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoCollapse;
         
         ImGui::Begin("nabla-control", nullptr, flags);
 
