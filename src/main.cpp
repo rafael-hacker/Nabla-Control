@@ -4,6 +4,7 @@
 #include "../include/CPUCollector.hpp"
 #include "../include/MemoryCollector.hpp"
 #include "../include/DiskCollector.hpp"
+#include "../include/Temperature.hpp"
 #include <cstddef>
 
 
@@ -31,7 +32,8 @@ int main(){
     while (!WindowShouldClose()){
         Memory mem = GetMemory();
         DiskSpace disk = GetDiskSpace();
-        
+        Temperature temperature = GetTemp();    
+
         BeginDrawing();
         ClearBackground(Color({15,17,21,255}));
         rlImGuiBegin();
@@ -102,7 +104,16 @@ int main(){
             ImGui::Unindent();
         }
     
+        if (ImGui::CollapsingHeader("Temperature")){
+            ImGui::Indent();
+            ImGui::TextColored({1, 0,0, 0.6f}, "%s", temperature.type.c_str());
+            ImGui::Separator();
+            ImGui::Spacing();
+            ImGui::TextColored({1, 0, 0, 1}, "%.2f°C", temperature.temperature_celsius);
+            ImGui::Unindent();
+        }
         
+
         ImGui::End();
         
         
