@@ -1,6 +1,8 @@
 #include "raylib.h"
 #include "imgui.h"
 #include "rlImGui.h"
+#include <cfloat>
+#include <cstdio>
 #include <string>
 #include <vector>
 #include "../include/CPUCollector.hpp"
@@ -9,6 +11,7 @@
 #include "../include/Temperature.hpp"
 #include "../include/ProcessCollector.hpp"
 #include "../include/KillProcess.hpp"
+#include "../include/NetworkCollector.hpp"
 #include <cstddef>
 
 
@@ -29,10 +32,16 @@ int main(){
     style.Colors[ImGuiCol_Border] = ImVec4(0.3f, 0.8f, 0.9f, 0.5f);
     style.WindowBorderSize = 1.5f;
     style.Colors[ImGuiCol_TitleBg] = ImVec4(0.10f,0.12f,0.16f,1);
-    
+   
+
+    // variables
+    std::vector <float> histo_rx;
+    std::vector <float> histo_tx;
+    const size_t limit = 60;
     CpuUsage cpu = CpuUsageCalculate();
     double lastcpu = 0.0;
-
+    NetworkStats network = GetNetworkStats();
+    
     while (!WindowShouldClose()){
         Memory mem = GetMemory();
         DiskSpace disk = GetDiskSpace();
@@ -55,7 +64,16 @@ int main(){
         ImGui::Separator();
         ImGui::Spacing();
 
-        if (ImGui::GetTime() - lastcpu >= 1){lastcpu = ImGui::GetTime(); cpu = CpuUsageCalculate();}
+        if (ImGui::GetTime() - lastcpu >= 1){
+            lastcpu = ImGui::GetTime(); 
+            cpu = CpuUsageCalculate();
+            network = GetNetworkStats();
+            histo_rx.push_back(network.rx_mbps);
+            histo_tx.push_back(network.tx_mbps);
+            if (histo_rx.size() > limit){histo_rx.erase(histo_rx.begin());}
+            if (histo_tx.size() > limit){histo_tx.erase(histo_tx.begin());}
+        }
+
         if (ImGui::CollapsingHeader("Memory", ImGuiTreeNodeFlags_DefaultOpen)){
             ImGui::Indent();
             ImGui::SeparatorText(" Memory used ");
@@ -102,8 +120,7 @@ int main(){
             
             ImGui::PushStyleColor(ImGuiCol_PlotHistogram, {0.3f, 0.85f, 0.4f, 1.0f});
             ImGui::ProgressBar(disk.percent_available / 100.0f);
-            ImGui::PopStyleColor()
-;
+            ImGui::PopStyleColor();
             ImGui::Separator();
             ImGui::TextColored({0, 1, 0, 1}, "Disk Available %.2fGB", disk.avaliable);
             ImGui::Unindent();
@@ -146,7 +163,22 @@ int main(){
             }
             ImGui::Unindent();
         }
+        
+        if (ImGui::CollapsingHeader("Network")){
+            char text[32] {};
+            snprintf(text, sizeof (text), "Download %.2f", network.rx_mbps);
 
+            ImGui::Indent();
+            ImGui::PushStyleColor(ImGuiCol_PlotLines, {0.45f, 0.85f, 0.55f, 1.0f});
+            ImGui::PlotLines("Download ", histo_rx.data(), (int)histo_rx.size(), 0,text, 0.0f, FLT_MAX, ImVec2(-1, 70));
+            ImGui::PopStyleColor();
+
+            ImGui::PushStyleColor(ImGuiCol_PlotLines, {0.95f, 0.45f, 0.45f, 1.0f});
+            snprintf(text, sizeof(text), "Upload %.2f", network.tx_mbps);
+            ImGui::PlotLines("Upload", histo_tx.data(), (int)histo_tx.size(), 0, text, 0.0f, FLT_MAX, ImVec2(-1, 70));
+            ImGui::PopStyleColor();
+            ImGui::Unindent();
+        }
         ImGui::End();
         
         

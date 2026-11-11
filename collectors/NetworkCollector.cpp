@@ -50,11 +50,17 @@ NetCounter GetNetworkCounter(){
 
 NetworkStats GetNetworkStats(){
     NetworkStats stats;
-    NetCounter before = GetNetworkCounter();
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    static NetCounter before = GetNetworkCounter();
+
     NetCounter after = GetNetworkCounter();
+        
+    if (after.rx < before.rx || after.tx < before.tx){
+        before = after;
+        return stats;
+    }
     
     stats.rx_mbps = (after.rx - before.rx) / 1.0 / MB;
     stats.tx_mbps = (after.tx - before.tx) / 1.0 / MB;
+    before = after;
     return stats;
 }
